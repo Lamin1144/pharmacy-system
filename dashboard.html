@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pharmacy Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { text-align: center; }
+    .card { border: 1px solid #ccc; padding: 15px; margin: 10px; display: inline-block; width: 200px; text-align: center; }
+    #medicineTable, #salesTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    #medicineTable th, #medicineTable td, #salesTable th, #salesTable td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<h1>Pharmacy Dashboard</h1>
+
+<div id="summary">
+  <div class="card">Total Stock Value: <span id="totalStock">Le 0</span></div>
+  <div class="card">Today's Sales: <span id="todaysSales">Le 0</span></div>
+  <div class="card">Expired Medicines: <span id="expiredCount">0</span></div>
+  <div class="card">Low Stock Medicines: <span id="lowStockCount">0</span></div>
+</div>
+
+<h2>Medicine List</h2>
+<table id="medicineTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Quantity</th>
+      <th>Price (Le)</th>
+      <th>Expiry Date</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<h2>Sales Records Today</h2>
+<table id="salesTable">
+  <thead>
+    <tr>
+      <th>Medicine</th>
+      <th>Quantity Sold</th>
+      <th>Total Amount (Le)</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase config (replace with yours)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // Redirect to login if not authenticated
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = "login.html";
+    } else {
+      loadDashboard();
+    }
+  });
+
+  // Function to load dashboard data
+  async function loadDashboard() {
+    const medicineSnapshot = await db.collection('medicines').get();
+    const salesSnapshot = await db.collection('sales').where('date', '==', new Date().toISOString().split('T')[0]).get();
+
+    let totalStockValue = 0;
+    let expiredCount = 0;
+    let lowStockCount = 0;
+
+    const today = new Date().toISOString().split('T')[0];
+
+    const medicineTableBody = document.querySelector('#medicineTable tbody');
+    medicineTableBody.innerHTML = '';
+
+    medicineSnapshot.forEach(doc => {
+      const med = doc.data();
+      const expiry = med.expiryDate;
+
+      // Calculate total stock value
+      totalStockValue += med.quantity * med.price;
+
+      // Count expired and low stock
+      if (expiry < today) expiredCount++;
+      if (med.quantity <= 5) lowStockCount++;
+
+      // Add row to table
+      medicineTableBody.innerHTML += `
+        <tr>
+          <td>${med.name}</td>
+          <td>${med.quantity}</td>
+          <td>${med.price}</td>
+          <td>${med.expiryDate}</td>
+        </tr>
+      `;
+    });
+
+    document.getElementById('totalStock').innerText = 'Le ' + totalStockValue;
+    document.getElementById('expiredCount').innerText = expiredCount;
+    document.getElementById('lowStockCount').innerText = lowStockCount;
+
+    // Sales today
+    let todaysSalesAmount = 0;
+    const salesTableBody = document.querySelector('#salesTable tbody');
+    salesTableBody.innerHTML = '';
+    salesSnapshot.forEach(doc => {
+      const sale = doc.data();
+      todaysSalesAmount += sale.totalAmount;
+      salesTableBody.innerHTML += `
+        <tr>
+          <td>${sale.medicineName}</td>
+          <td>${sale.quantitySold}</td>
+          <td>${sale.totalAmount}</td>
+          <td>${sale.date}</td>
+        </tr>
+      `;
+    });
+    document.getElementById('todaysSales').innerText = 'Le ' + todaysSalesAmount;
+  }
+</script>
+
+</body>
+</html>
