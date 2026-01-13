@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hope Pharmacy Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Hope Pharmacy Management System</h2>
+
+<div class="menu">
+    <button onclick="showSection('addMedicine')">Add Medicine</button>
+    <button onclick="showSection('stock')">View Stock</button>
+    <button onclick="showSection('sales')">Sales</button>
+</div>
+
+<div id="addMedicine" class="section">
+    <h3>Add Medicine</h3>
+    <input id="name" placeholder="Medicine Name">
+    <input id="batch" placeholder="Batch No">
+    <input id="qty" type="number" placeholder="Quantity">
+    <input id="price" type="number" placeholder="Price">
+    <input id="expiry" type="date">
+    <button onclick="addMedicine()">Save Medicine</button>
+</div>
+
+<div id="stock" class="section" style="display:none">
+    <h3>Medicine Stock</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Batch</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Expiry</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="stockList"></tbody>
+    </table>
+</div>
+
+<div id="sales" class="section" style="display:none">
+    <h3>Medicine Sales</h3>
+
+    <select id="saleMedicine"></select>
+    <input id="saleQty" type="number" placeholder="Quantity to sell">
+    <button onclick="sellMedicine()">Sell</button>
+
+    <h4>Sales Record</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody id="salesList"></tbody>
+    </table>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+<div id="report" class="section" style="display:none">
+    <h3>Daily Sales Report</h3>
+    <button onclick="generateDailyReport()">Generate Today’s Report</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Qty Sold</th>
+                <th>Total</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody id="dailyReportList"></tbody>
+    </table>
+</div>
