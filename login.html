@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pharmacy Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Pharmacy Login</h1>
+
+<div style="max-width:400px; margin:auto;">
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Password" required><br>
+    <button onclick="loginUser()">Login</button>
+    <p id="loginError"></p>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<!-- Firebase config + script.js -->
+<script src="script.js"></script>
+
+</body>
+</html>

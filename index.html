@@ -1,106 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hope Pharmacy Management System</title>
+    <title>Pharmacy System</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBfMFtaOx-r6TneL2fcmFUQxZDurjoDNGI",
-    authDomain: "hope-pharmacy.firebaseapp.com",
-    projectId: "hope-pharmacy",
-    storageBucket: "hope-pharmacy.firebasestorage.app",
-    messagingSenderId: "964966539886",
-    appId: "1:964966539886:web:472740a3d0108c780cfc7f",
-    measurementId: "G-K4YJ2W6B6J"
-  };
+<h1>Pharmacy System</h1>
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-<h2>Hope Pharmacy Management System</h2>
+<div style="max-width:600px; margin:auto;">
 
-<div class="menu">
-    <button onclick="showSection('addMedicine')">Add Medicine</button>
-    <button onclick="showSection('stock')">View Stock</button>
-    <button onclick="showSection('sales')">Sales</button>
+    <h2>Add Medicine</h2>
+    <input type="text" id="medName" placeholder="Medicine Name"><br>
+    <input type="number" id="medQuantity" placeholder="Quantity"><br>
+    <input type="number" id="medPrice" placeholder="Price (Le)"><br>
+    <input type="date" id="medExpiry" placeholder="Expiry Date"><br>
+    <button onclick="addMedicine()">Add Medicine</button>
+
+    <h2>Sell Medicine</h2>
+    <input type="text" id="sellMedName" placeholder="Medicine Name"><br>
+    <input type="number" id="sellQuantity" placeholder="Quantity Sold"><br>
+    <button onclick="sellMedicine()">Sell Medicine</button>
+
 </div>
 
-<div id="addMedicine" class="section">
-    <h3>Add Medicine</h3>
-    <input id="name" placeholder="Medicine Name">
-    <input id="batch" placeholder="Batch No">
-    <input id="qty" type="number" placeholder="Quantity">
-    <input id="price" type="number" placeholder="Price">
-    <input id="expiry" type="date">
-    <button onclick="addMedicine()">Save Medicine</button>
-</div>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-<div id="stock" class="section" style="display:none">
-    <h3>Medicine Stock</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Batch</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Expiry</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="stockList"></tbody>
-    </table>
-</div>
-
-<div id="sales" class="section" style="display:none">
-    <h3>Medicine Sales</h3>
-
-    <select id="saleMedicine"></select>
-    <input id="saleQty" type="number" placeholder="Quantity to sell">
-    <button onclick="sellMedicine()">Sell</button>
-
-    <h4>Sales Record</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>Medicine</th>
-                <th>Qty</th>
-                <th>Total</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody id="salesList"></tbody>
-    </table>
-</div>
-
+<!-- Firebase config + script.js -->
 <script src="script.js"></script>
+
 </body>
 </html>
-
-<div id="report" class="section" style="display:none">
-    <h3>Daily Sales Report</h3>
-    <button onclick="generateDailyReport()">Generate Today’s Report</button>
-    <table>
-        <thead>
-            <tr>
-                <th>Medicine</th>
-                <th>Qty Sold</th>
-                <th>Total</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody id="dailyReportList"></tbody>
-    </table>
-</div>
